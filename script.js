@@ -28,6 +28,24 @@ function load() {
 var S = load();
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 
+/* ---------- Popup notifications (service worker on Android, plain Notification elsewhere) ---------- */
+var swReg = null, warned = false;
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(function (r) { swReg = r; }).catch(function () {});
+}
+function askNotify() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'default') Notification.requestPermission();
+  else if (Notification.permission === 'denied' && !warned) { warned = true; toast('Notifications blocked - allow them in browser site settings'); }
+}
+function notify(title, body) {
+  try { if (navigator.vibrate && !S.muted) navigator.vibrate([200, 100, 200]); } catch (e) {}
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  var opts = { body: body, tag: 'pixel-quest', renotify: true };
+  function plain() { try { new Notification(title, opts); } catch (e) {} }
+  if (swReg && swReg.showNotification) swReg.showNotification(title, opts).catch(plain); else plain();
+}
+
 /* ---------- Levels: LV n needs 50*n*(n-1) total XP ---------- */
 function need(l) { return 50 * l * (l - 1); }
 function lvlOf(xp) { var l = 1; while (xp >= need(l + 1)) l++; return l; }
@@ -98,11 +116,14 @@ function complete() {
     $('vReward').textContent = (S.reward.name || 'Free time') + ' (' + S.reward.mins + ' min)' + (S.reward.desc ? ' - ' + S.reward.desc : '');
     $('victory').hidden = false;
     beep([523, 659, 784, 1047, 784, 1047]);
+    notify('⚔ Quest complete!', 'Claim your reward: ' + (S.reward.name || 'Free time'));
   } else if (mode === 'reward') {
+    notify('🎁 Reward time is up!', 'Back to the quest when you are ready.');
     finishReward(); return;
   } else {
     mode = 'focus'; status = 'idle'; left = total = dur('focus');
     beep([784, 659, 523]); toast('Break over! Ready for the next quest?');
+    notify('⏰ Break over!', 'Ready for the next quest?');
   }
   render();
 }
@@ -171,7 +192,7 @@ function draw() {
 }
 
 /* ---------- Wire up controls ---------- */
-$('bStart').onclick = function () { beep([440]); start(); };
+$('bStart').onclick = function () { beep([440]); askNotify(); start(); };
 $('bPause').onclick = pause;
 $('bResume').onclick = resume;
 $('bReset').onclick = reset;

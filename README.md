@@ -33,3 +33,9 @@ All paths are relative, so it works from the repository subpath.
 Rewards: XP = focus minutes × 2, coins ≈ minutes ÷ 5, only for sessions that run to the end. Level N needs 50·N·(N−1) total XP.
 
 Progress is saved in your browser's localStorage. To start over, clear this site's data.
+
+## Notifications and install
+- Press **START** once and tap **Allow** to enable popup notifications. You get a popup + vibration when focus, reward, or break time ends.
+- Needs HTTPS or localhost (GitHub Pages is fine). It does not work from `file://`.
+- On Android Chrome: menu → **Add to Home screen / Install app** to run it like an app.
+- Limit: the browser must still be running. If the app is fully closed, no alert fires (a native Android app can do that).

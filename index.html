@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pixel Quest Pomodoro</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="game">
+  <h1>⚔ POMODORO QUEST ⚔</h1>
+  <canvas id="world" width="160" height="60" aria-label="Pixel world"></canvas>
+
+  <section class="panel">
+    <div class="row top"><div>LV <b id="lvl">1</b></div><div>🪙 <b id="coins">0</b></div><div>✔ <b id="sessions">0</b></div><button id="mute" class="btn sm">SND ON</button></div>
+    <div class="bar sm"><div id="xpFill" class="fill xp"></div></div>
+    <div id="xpTxt" class="tiny"></div>
+  </section>
+
+  <section class="panel">
+    <div class="lbl">ACTIVE QUEST</div>
+    <div id="questLine" class="quest"></div>
+    <div class="qrow"><input id="questIn" maxlength="60" placeholder="e.g. Study Java OOP"><button id="questBtn" class="btn sm">SET</button></div>
+  </section>
+
+  <section class="panel timer">
+    <div id="modeLbl" class="lbl">FOCUS MODE</div>
+    <div id="time" class="time">25:00</div>
+    <div class="bar"><div id="fill" class="fill"></div></div>
+    <div class="row">
+      <button id="bStart" class="btn go">START</button>
+      <button id="bPause" class="btn">PAUSE</button>
+      <button id="bResume" class="btn go">RESUME</button>
+      <button id="bFinish" class="btn go">FINISH REWARD EARLY</button>
+      <button id="bReset" class="btn red">RESET</button>
+    </div>
+  </section>
+
+  <details class="panel" open>
+    <summary>🎁 REWARD</summary>
+    <label>Reward name<input id="rName" maxlength="40" placeholder="Play guitar"></label>
+    <label>Reward duration (min)<input id="rMins" type="number" min="1" max="120"></label>
+    <label>Description (optional)<input id="rDesc" maxlength="100"></label>
+  </details>
+
+  <details class="panel">
+    <summary>⚙ TIMER SETTINGS</summary>
+    <div class="grid">
+      <label>Focus (min)<input id="sFocus" type="number" min="1" max="180"></label>
+      <label>Short break (min)<input id="sShort" type="number" min="1" max="60"></label>
+      <label>Long break (min)<input id="sLong" type="number" min="1" max="120"></label>
+      <label>Sessions per long break<input id="sEvery" type="number" min="1" max="12"></label>
+    </div>
+  </details>
+
+  <section class="panel"><div class="lbl">ACHIEVEMENTS</div><ul id="ach"></ul></section>
+</main>
+
+<div id="victory" class="overlay" hidden>
+  <div class="panel win">
+    <div class="stars">★ ★ ★</div>
+    <h2>QUEST COMPLETE!</h2>
+    <p id="vQuest"></p>
+    <p id="vGain" class="gain"></p>
+    <div class="lbl">YOUR REWARD</div>
+    <p id="vReward"></p>
+    <button id="bClaim" class="btn go big">CLAIM REWARD</button>
+  </div>
+</div>
+<div id="toast" class="toast" hidden></div>
+<script src="script.js"></script>
+</body>
+</html>
